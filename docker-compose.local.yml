@@ -1,0 +1,96 @@
+name: student-local
+
+services:
+  # ── Infrastructure ────────────────────────────────────────────────────────
+  db:
+    image: postgres:16.8-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: students
+      POSTGRES_USER: students
+      POSTGRES_PASSWORD: students
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks: [app]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U students -d students"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  kafka-volume-init:
+    image: busybox:1.37.0
+    user: "0:0"
+    command: ["sh", "-c", "chown -R 1000:1000 /data"]
+    volumes: ["kafkadata:/data"]
+    network_mode: none
+
+  kafka:
+    depends_on:
+      kafka-volume-init: { condition: service_completed_successfully }
+    image: apache/kafka:3.9.0
+    restart: unless-stopped
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+    volumes: ["kafkadata:/var/lib/kafka/data"]
+    networks: [app]
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+
+  # ── Application ───────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+      kafka: { condition: service_healthy }
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/students
+      DB_USER: students
+      DB_PASSWORD: students
+      KAFKA_BOOTSTRAP: kafka:9092
+      EVENTS_TOPIC: student-events
+      APP_VERSION: local
+    networks: [app]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8080/actuator/health/readiness || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      backend: { condition: service_healthy }
+    environment:
+      BACKEND_HOST: backend
+    ports:
+      - "8080:8080"
+    networks: [app]
+
+networks:
+  app:
+
+volumes:
+  pgdata:
+  kafkadata:

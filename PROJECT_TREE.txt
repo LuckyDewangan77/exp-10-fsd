@@ -1,0 +1,80 @@
+student-cicd/
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml
+├── backend/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   │   └── com/
+│   │   │   │       └── example/
+│   │   │   │           └── students/
+│   │   │   │               ├── ApiErrors.java
+│   │   │   │               ├── Application.java
+│   │   │   │               ├── KafkaHealthIndicator.java
+│   │   │   │               ├── Student.java
+│   │   │   │               ├── StudentController.java
+│   │   │   │               ├── StudentEvents.java
+│   │   │   │               ├── StudentNotFound.java
+│   │   │   │               ├── StudentRepository.java
+│   │   │   │               ├── StudentRequest.java
+│   │   │   │               └── StudentService.java
+│   │   │   └── resources/
+│   │   │       ├── db/
+│   │   │       │   └── migration/
+│   │   │       │       └── V1__students.sql
+│   │   │       └── application.yml
+│   │   └── test/
+│   │       └── java/
+│   │           └── com/
+│   │               └── example/
+│   │                   └── students/
+│   │                       ├── ContainerTestBase.java
+│   │                       ├── KafkaIT.java
+│   │                       ├── StudentApiIT.java
+│   │                       ├── StudentContractIT.java
+│   │                       └── StudentServiceTest.java
+│   ├── .dockerignore
+│   ├── Dockerfile
+│   └── pom.xml
+├── contracts/
+│   ├── README.md
+│   └── example-pact.json
+├── deploy/
+│   ├── .env.example
+│   ├── bootstrap.sh
+│   ├── deploy.sh
+│   ├── gateway.compose.yml
+│   ├── infra.compose.yml
+│   ├── init-staging.sql
+│   ├── monitor.py
+│   ├── release.compose.yml
+│   ├── render_gateway.py
+│   └── rollback.sh
+├── frontend/
+│   ├── src/
+│   │   ├── api.js
+│   │   ├── main.js
+│   │   └── style.css
+│   ├── test/
+│   │   ├── api.test.js
+│   │   └── contract.test.js
+│   ├── .dockerignore
+│   ├── Dockerfile
+│   ├── index.html
+│   ├── nginx.conf.template
+│   ├── package-lock.json
+│   ├── package.json
+│   └── vite.config.js
+├── scripts/
+│   ├── check-stack.sh
+│   ├── remote-deploy.sh
+│   ├── smoke.py
+│   ├── test-routing.py
+│   └── verify-local.sh
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── README.md
+├── VALIDATION.md
+└── compose.yml

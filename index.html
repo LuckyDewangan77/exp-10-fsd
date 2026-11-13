@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>StudentLab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+
+  <!-- ── Sidebar ────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">SL</div>
+      <span class="logo-text">StudentLab</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-section="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-item" data-section="students">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Students
+      </button>
+      <button class="nav-item" data-section="import">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Import / Export
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="theme-toggle" id="theme-toggle" title="Toggle theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        Toggle Theme
+      </div>
+      <div class="version-badge" id="version">v—</div>
+    </div>
+  </aside>
+
+  <!-- ── Main ───────────────────────────────────────────────────── -->
+  <div class="main-wrapper">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger" id="hamburger">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div>
+          <h1 class="page-title" id="page-title">Dashboard</h1>
+          <span class="page-subtitle" id="page-subtitle">Overview of your student data</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="search" placeholder="Search students…" autocomplete="off">
+          <kbd class="search-kbd">⌘K</kbd>
+        </div>
+        <button class="btn-ghost" id="refresh-btn" title="Refresh data">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
+        <button class="btn-primary" id="open-modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Student
+        </button>
+      </div>
+    </header>
+
+    <!-- ── SECTION: Dashboard ─────────────────────────────────── -->
+    <section id="section-dashboard" class="section">
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card stat-card--blue">
+          <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <div class="stat-body">
+            <div class="stat-value" id="stat-total">—</div>
+            <div class="stat-label">Total Students</div>
+          </div>
+          <div class="stat-trend" id="stat-trend">+0 today</div>
+        </div>
+        <div class="stat-card stat-card--green">
+          <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+          <div class="stat-body">
+            <div class="stat-value text-green" id="stat-status">Online</div>
+            <div class="stat-label">API Status</div>
+          </div>
+          <div class="stat-badge badge-green">Live</div>
+        </div>
+        <div class="stat-card stat-card--purple">
+          <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="stat-body">
+            <div class="stat-value" id="stat-time">—</div>
+            <div class="stat-label">Last Refreshed</div>
+          </div>
+        </div>
+        <div class="stat-card stat-card--orange">
+          <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <div class="stat-body">
+            <div class="stat-value" id="stat-ops">0</div>
+            <div class="stat-label">Operations</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="quick-actions">
+        <h2 class="section-heading">Quick Actions</h2>
+        <div class="action-grid">
+          <button class="action-card" id="seed-btn">
+            <div class="action-icon action-icon--blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 8v4l3 3"/><path d="M18 2v6h6"/></svg>
+            </div>
+            <div class="action-text">
+              <strong>Load Demo Data</strong>
+              <span>Seed 8 sample students</span>
+            </div>
+          </button>
+          <button class="action-card" id="export-btn">
+            <div class="action-icon action-icon--green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </div>
+            <div class="action-text">
+              <strong>Export CSV</strong>
+              <span>Download all student data</span>
+            </div>
+          </button>
+          <button class="action-card" onclick="document.querySelector('[data-section=students]').click()">
+            <div class="action-icon action-icon--purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="action-text">
+              <strong>View All Students</strong>
+              <span>Browse and manage records</span>
+            </div>
+          </button>
+          <button class="action-card" id="add-quick">
+            <div class="action-icon action-icon--orange">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            </div>
+            <div class="action-text">
+              <strong>Add Student</strong>
+              <span>Create a new record</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Recent students preview -->
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">Recent Students</span>
+          <button class="btn-link" onclick="document.querySelector('[data-section=students]').click()">View all →</button>
+        </div>
+        <div class="table-scroll">
+          <table class="student-table">
+            <thead><tr><th>#</th><th>Student</th><th>Email</th><th></th></tr></thead>
+            <tbody id="recent-students"></tbody>
+          </table>
+          <div class="empty-state" id="recent-empty" style="display:none">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            <p>No students yet</p>
+            <span>Click "Load Demo Data" to get started</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION: Students ──────────────────────────────────── -->
+    <section id="section-students" class="section hidden">
+
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">All Students <span class="count-badge" id="count-badge">0</span></span>
+          <div class="table-actions">
+            <!-- Sort -->
+            <select class="select-sort" id="sort-select">
+              <option value="id-asc">Oldest first</option>
+              <option value="id-desc">Newest first</option>
+              <option value="name-asc">Name A→Z</option>
+              <option value="name-desc">Name Z→A</option>
+            </select>
+            <!-- Bulk delete -->
+            <button class="btn-danger-ghost hidden" id="bulk-delete-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+              Delete selected
+            </button>
+            <button class="btn-ghost" id="export-btn2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export CSV
+            </button>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table class="student-table">
+            <thead>
+              <tr>
+                <th class="th-check"><input type="checkbox" id="select-all" class="checkbox"></th>
+                <th>#</th>
+                <th>Student</th>
+                <th>Email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="students"></tbody>
+          </table>
+          <div class="empty-state" id="empty-state" style="display:none">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            <p>No students found</p>
+            <span>Add a student or load demo data</span>
+          </div>
+        </div>
+        <!-- Pagination -->
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </section>
+
+    <!-- ── SECTION: Import/Export ─────────────────────────────── -->
+    <section id="section-import" class="section hidden">
+      <div class="import-grid">
+        <!-- CSV Import -->
+        <div class="table-card">
+          <div class="table-header"><span class="table-title">Import Students via CSV</span></div>
+          <div class="import-body">
+            <p class="import-desc">Upload a CSV file with columns: <code>name</code>, <code>email</code></p>
+            <div class="csv-format">
+              <pre>name,email
+Alice Johnson,alice@example.com
+Bob Smith,bob@example.com</pre>
+            </div>
+            <label class="file-drop" id="file-drop">
+              <input type="file" id="csv-file" accept=".csv" style="display:none">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <strong>Click to upload CSV</strong>
+              <span>or drag and drop</span>
+            </label>
+            <div class="import-preview hidden" id="import-preview">
+              <h4>Preview (<span id="preview-count">0</span> rows)</h4>
+              <div class="preview-scroll"><table class="student-table"><thead><tr><th>Name</th><th>Email</th></tr></thead><tbody id="preview-body"></tbody></table></div>
+              <button class="btn-primary" id="import-confirm">Import All</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Export card -->
+        <div class="table-card">
+          <div class="table-header"><span class="table-title">Export Data</span></div>
+          <div class="import-body">
+            <div class="export-options">
+              <button class="export-option" id="export-csv-full">
+                <div class="action-icon action-icon--green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div>
+                  <strong>Export as CSV</strong>
+                  <span>Comma-separated values, opens in Excel</span>
+                </div>
+              </button>
+              <button class="export-option" id="export-json-full">
+                <div class="action-icon action-icon--blue">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </div>
+                <div>
+                  <strong>Export as JSON</strong>
+                  <span>Structured data for developers</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /main-wrapper -->
+
+  <!-- ── Add/Edit Modal ─────────────────────────────────────────── -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">Add Student</h2>
+        <button class="modal-close" id="modal-close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="form" class="modal-form" novalidate>
+        <input type="hidden" id="student-id">
+        <div class="field">
+          <label for="name">Full Name</label>
+          <input id="name" type="text" placeholder="e.g. Jane Doe" required maxlength="100" autocomplete="off">
+          <span class="field-error" id="name-error"></span>
+        </div>
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input id="email" type="email" placeholder="e.g. jane@example.com" required maxlength="200" autocomplete="off">
+          <span class="field-error" id="email-error"></span>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-ghost" id="cancel">Cancel</button>
+          <button type="submit" class="btn-primary" id="submit-btn">Save Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Toast ───────────────────────────────────────────────────── -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
